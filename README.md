@@ -8,6 +8,7 @@ Pre-requisites:
 - Moose (https://github.com/BhallaLab/moose)
 - FindSim (https://github.com/BhallaLab/FindSim)
 - Mpld3 (http://mpld3.github.io/)
+- Python3 virtualenv
 - Django, djangorestframework
 
 
