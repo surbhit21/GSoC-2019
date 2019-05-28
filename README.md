@@ -47,15 +47,16 @@ APIs:
 
 /tasks/
 
-POST:
-{
-'tsv_file': .tsv file
-'model_file': model file(.g or .xml)
-}
+POST:  
+{  
+'tsv_file': .tsv file  
+'model_file': model file(.g or .xml)  
+}  
 
-Response:
-{
-'score': score of experiment
-'time': cost time
-'figure': html string of the figure
-}
+
+Response:  
+{  
+'score': score of experiment  
+'time': cost time  
+'figure': html string of the figure  
+}  
