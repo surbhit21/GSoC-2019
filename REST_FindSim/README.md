@@ -1,5 +1,5 @@
 # GSoC-2019
-Google Summer of Code 2019 project 
+Google Summer of Code 2019 project
 
 This will be a working implementation of a RESTful API to run FindSim experiment on NSG (https://www.nsgportal.org/) server.
 
@@ -45,12 +45,18 @@ djangorestframework
 
 APIs:
 
-/tasks/:
+/tasks/
 
-POST: 	'tsv_file': .tsv file
-	'model_file': model file(.g or .xml)
-Response:
-	'score': score of experiment
-	'time': cost time
-	'figure': html string of the figure
+POST:  
+{  
+'tsv_file': .tsv file  
+'model_file': model file(.g or .xml)  
+}  
 
+
+Response:  
+{  
+'score': score of experiment  
+'time': cost time  
+'figure': html string of the figure  
+}  
