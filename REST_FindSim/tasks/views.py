@@ -31,6 +31,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         serializer.validated_data['score'] = res.score
         serializer.validated_data['time'] = res.time
         serializer.validated_data['figure'] = res.figure
+        serializer.validated_data['error'] = res.error
 
         serializer.save()
         headers = self.get_success_headers(serializer.data)
