@@ -59,4 +59,5 @@ Response:
 'score': score of experiment  
 'time': cost time  
 'figure': html string of the figure  
+'error': infomations when error happens  
 }  
