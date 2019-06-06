@@ -3,6 +3,7 @@ from REST_FindSim.settings import BASE_DIR
 
 # Create your models here.
 class Task(models.Model):
+    username    = models.TextField(blank = False, default = 'admin_HC')
     tsv_file    = models.FileField(blank = False, upload_to = "files/tsv/")
     model_file  = models.FileField(blank = False, upload_to = "files/model/")
     score       = models.DecimalField(blank = True, null = True, editable = False, max_digits=20, decimal_places=10)
