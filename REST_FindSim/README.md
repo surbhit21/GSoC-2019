@@ -3,7 +3,11 @@ Google Summer of Code 2019 project
 
 This will be a working implementation of a RESTful API to run FindSim experiment on NSG (https://www.nsgportal.org/) server.
 
-Pre-requisites:
+### RESTful API
+
+#### 1. Implementing FindSim & Setting up environment
+
+##### Pre-requisites:
 
 - Moose (https://github.com/BhallaLab/moose)
 - FindSim (https://github.com/BhallaLab/FindSim)
@@ -11,53 +15,75 @@ Pre-requisites:
 - Python3 virtualenv
 - Django, djangorestframework
 
-1. Install Python3
+##### Turorial
+- Install Python3
+- Set up Python3 venv(optional)
+- Install following packages via apt:
+    + python-dev
+    + libgsl0-dev
+    + libhdf5-dev
+    + python3-tk
+- Install following packages via pip:  
+    + numpy
+    + wheel
+    + python-libsbml
+    + matplotlib
+    + pyneuroml
+    + Jinja2
+    + mpld3
+    + Django
+    + djangorestframework
 
-2. Set up Python3 venv(optional)
+- install moose
+```
+    > pip install pymoose --user --pre --upgrade
+```
+- Clone FindSim from repostory and link FindSim to REST_FindSim/third_party
+```
+    > git clone https://github.com/BhallaLab/FindSim.git
 
-3. Install following packages via apt:
-python-dev
-libgsl0-dev
-libhdf5-dev
-python3-tk
+    > ln -s path/to/your/FindSim REST_FindSim/third_party/FindSim
+```
 
-4. Install following packages via pip:
-numpy
-wheel
-python-libsbml
-matplotlib
-pyneuroml
-Jinja2
-mpld3
-Django
-djangorestframework
-
-5. install moose
-
-> pip install pymoose --user --pre --upgrade
-
-6. Clone FindSim from repostory and link FindSim to REST_FindSim/third_party
-
-> git clone https://github.com/BhallaLab/FindSim.git
-
-> ln -s path/to/your/FindSim REST_FindSim/third_party/FindSim
-
-
-APIs:
-
-/tasks/
-
-POST:  
-{  
-'tsv_file': .tsv file  
-'model_file': model file(.g or .xml)  
-}  
+#### 2. RESTful APIs:
 
 
-Response:  
-{  
-'score': score of experiment  
-'time': cost time  
-'figure': html string of the figure  
-'error': infomations when error happens  
-}  
+**The major source is 'task', which contains:**
+
+ - An username
+ - A .tsv file
+ - A model file
+ -  A score
+ -  A run time
+ -  A mpld3 figure showing experiment results
+ -  An error-info buffer, stores error command line output when error happens(empty if no error happens)
+
+**By now, there are following APIs:**  
+
+|  url   | POST | GET |
+|  ----  | ----  | ---- |
+| /tasks/ | Give username, upload .tsv file and model(.g or .xml) file.<br>Response score, running time and experiemnt result figure |  response all tasks|
+
+
+1. url: /tasks/
+
+    POST:  
+    {
+    'username': provided by
+    'tsv_file': .tsv file  
+    'model_file': model file(.g or .xml)  
+    }  
+
+
+    Response:  
+    A task info:
+    {  
+    'score': score of experiment  
+    'time': cost time  
+    'figure': html string of the figure  
+    'error': infomations when error happens  
+    }
+
+    GET:  
+    Response:  
+   A list of tasks.
