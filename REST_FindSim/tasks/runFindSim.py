@@ -38,7 +38,19 @@ def parse_FindSim_output(output):
     # Check if there is error or exception
     if re.search('time', output, re.I) == None\
     or re.search('score', output, re.I) == None:
-        tResult.set_error(output)
+        # Error happens, parse output to get the error messege
+        errormsg = ''
+        if re.search('error',output, re.I) != None:
+            p1 = re.compile(r'[a-zA-Z0-9.]*error.*', re.I)
+            errors = p1.findall(output)
+            errormsg = errors[-1]
+        elif re.search('exception',output, re.I) != None:
+            p2 = re.compile(r'[a-zA-Z0-9]*exception.*', re.I)
+            errors = p2.findall(output)
+            errormsg = errors[-1]
+        else:
+            errormsg = output
+        tResult.set_error(errormsg)
         return tResult
 
     # No error, parse the getoutput
