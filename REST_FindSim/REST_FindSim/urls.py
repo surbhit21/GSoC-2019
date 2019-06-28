@@ -20,7 +20,8 @@ from rest_framework.routers import DefaultRouter
 from tasks import views
 
 router = DefaultRouter()
-router.register(r'tasks', views.TaskViewSet)
+router.register(r'tasks/Calculation', views.CalculationViewSet)
+router.register(r'tasks/Optimization', views.OptimizationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
