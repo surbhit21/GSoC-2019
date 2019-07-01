@@ -43,7 +43,7 @@ class OptimizationResult():
     def set_time(self, _time):
         self.time = _time
 
-    def set_figure(self, _model):
+    def set_model(self, _model):
         self.model = _model
 
     def set_error(self, _error):
@@ -61,7 +61,7 @@ def parse_output(output = str, error = str, output_type = str):
     elif output_type == 'Optimization':
         t_result = OptimizationResult()
     else:
-        raise AssertionError("output type not found!")
+        raise AssertionError("Output type not found!")
 
     errormsg = ""
 

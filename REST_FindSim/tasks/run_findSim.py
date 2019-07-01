@@ -5,7 +5,7 @@ from .utility import *
 #from third_party.FindSim.findSim import *
 
 
-def run_findSim( script, modelFile , dumpFname = "", paramFname = "", optimizeElec=True, silent = False, scaleParam=[], settleTime = 0, settleDict = {} ):
+def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot = False, hideSubplots = False, optimizeElec=True,  silent = False, scaleParam=[], settleTime = 0, settleDict = {} ):
     t_result = FindSimResult()
 
     # Validation of .tsv file and modle file
@@ -23,10 +23,13 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", optimizeEl
     # Generate command line
     # This .py code print all we need into stdout
     command_FindSim = 'python third_party/interface_FindSim.py '+script+' -m '+modelFile
+    if paramFname != "":
+        command_FindSim += ' -p ' + paramFname
+    if hidePlot:
+        command_FindSim += ' -hp'
     # TODO(Chen): add other arguments into command line
     '''
     if dumpFname:
-    if paramFname:
     if not optimizeElec:
     if silent:
     if scaleParam:

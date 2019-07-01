@@ -82,13 +82,13 @@ class OptimizationViewSet(viewsets.ModelViewSet):
 
         serializer.validated_data['score'] = res.score
         serializer.validated_data['time'] = res.time
-        serializer.validated_data['optimized_model'] = res.model
+        # TODO(Chen): save optimized file into database
+        #serializer.validated_data['optimized_model'] = res.model
         serializer.validated_data['error'] = res.error
 
         serializer.save()
         headers = self.get_success_headers(serializer.data)
         os.remove(tsv_path)
         os.remove(model_path)
-
-
+        
         return Response(serializer.data)
