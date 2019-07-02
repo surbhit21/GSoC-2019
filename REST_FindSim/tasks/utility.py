@@ -33,9 +33,13 @@ class OptimizationResult():
         self.score = 0.0
         self.time = 0.0
         self.model = ""
+        self.parameters = []
         # When something is wrong,
         # front-end/client can get info from this
         self.error = ""
+
+    def add_parameter(self, _param = str):
+        self.parameters.append(_param)
 
     def set_score(self, _score):
         self.score = _score
@@ -68,7 +72,6 @@ def parse_output(output = str, error = str, output_type = str):
     # Get result from stdout output strings
     # Check if there is error or exception
     if error != ""\
-    or re.search('time', output, re.I) == None\
     or re.search('score', output, re.I) == None:
         # Error happens, parse output to get the error messege
         if re.search('error',output, re.I) != None:
@@ -104,10 +107,28 @@ def parse_output(output = str, error = str, output_type = str):
         t_result.set_figure(res_figure)
 
     elif output_type == 'Optimization':
-        # TODO(Chen)
-        t_result.set_score(outs[2])
-        t_result.set_time(outs[6])
-        outs = res_output.split(' ')
+        outs = output.split('\n')
+        i = 0
+        # parameters
+        while i < len(outs):
+            line = outs[i]
+            if line and line[0] != '.':
+                t_result.add_parameter(line)
+                i += 1
+            else:
+                break
+        # time
+        while i < len(outs):
+            line = outs[i]
+            if line and line[0] == '-':
+                words = line.split(' ')
+                t_result.set_time(words[3])
+                break
+            i += 1
+        # score
+        t_result.set_score(outs[len(outs)-3])
+        # optimized_model
+        # set in run_optimization()
     else:
         raise AssertionError("output type not found!")
 

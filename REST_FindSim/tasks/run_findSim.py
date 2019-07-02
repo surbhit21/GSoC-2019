@@ -1,7 +1,7 @@
 import subprocess
 import re
 
-from .utility import *
+from .utility import FindSimResult, parse_output, decode_bytes
 #from third_party.FindSim.findSim import *
 
 
@@ -27,6 +27,7 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
         command_FindSim += ' -p ' + paramFname
     if hidePlot:
         command_FindSim += ' -hp'
+    
     # TODO(Chen): add other arguments into command line
     '''
     if dumpFname:
@@ -47,6 +48,6 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
     p.wait()
 
     # Parse output
-    t_result = parse_output(decodeBytes(output_info),decodeBytes(error_info),"Calculation")
+    t_result = parse_output(decode_bytes(output_info),decode_bytes(error_info),"Calculation")
 
     return t_result

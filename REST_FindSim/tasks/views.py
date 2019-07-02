@@ -7,11 +7,10 @@ from rest_framework import status
 from .models import Calculation, Optimization
 from .serializers import CalculationSerializer, OptimizationSerializer
 from .run_findSim import run_findSim
-from .run_fptimization import run_optimization
+from .run_optimization import run_optimization
 
 import os
 import json
-import thread
 import zipfile
 import time
 
@@ -57,38 +56,46 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         serializer.save()
 
         #parse the path to .tsv file and model file
-        tsv_path = 'files/tsv/'+ serializer.validated_data['tsv_file'].name.split('/').pop()
+        tsv_path = 'files/tsv/'+ serializer.validated_data['tsv_files'].name.split('/').pop()
         model_path = 'files/model/'+ serializer.validated_data['model_file'].name.split('/').pop()
         file_label = serializer.validated_data['username'] + str(time.time())
-        tsv_path_new = 'files/tsv/'+ file_label + serializer.validated_data['tsv_file'].name.split('/').pop()
-        model_path_new = 'files/model/'+ file_label + serializer.validated_data['model_file'].name.split('/').pop()
+        os.mkdir('files/tsv/'+file_label)
+        os.mkdir('files/model/'+file_label)
+        os.mkdir('files/model/'+file_label+'/optimized')
+        tsv_path_new = 'files/tsv/'+ file_label +'/'+ serializer.validated_data['tsv_files'].name.split('/').pop()
+        model_path_new = 'files/model/'+ file_label +'/'+ serializer.validated_data['model_file'].name.split('/').pop()
 
         # Rename the files to avoid collision
         if os.path.exists(tsv_path):
             os.rename(tsv_path, tsv_path_new)
-            tsv_path = tsv_path_new
         else:
             serializer.validated_data['error'] = '.tsv files not found'
 
         if os.path.exists(model_path):
             os.rename(model_path, model_path_new)
-            model_path = model_path_new
         else:
             serializer.validated_data['error'] = 'model file not found'
 
-        res = run_optimization(tsv_path, model_path, file_label)
-        os.remove(tsv_path)
-        os.remove(model_path)
+        # define optimized model name
+        optimized_model = 'files/model/' + file_label + '/optimized/' + model_path_new.split('/').pop()
+        # Run optimization via subprocess
+        res = run_optimization(tsv_path_new, model_path_new, file_label, optimized_model)
+        #os.remove(tsv_path_new)
+        #os.remove(model_path_new)
 
         serializer.validated_data['score'] = res.score
         serializer.validated_data['time'] = res.time
-        # TODO(Chen): save optimized file into database
-        #serializer.validated_data['optimized_model'] = res.model
+        serializer.validated_data['parameters'] = json.dumps(res.parameters)
+        '''
+        if not res.has_error():
+            res_model_file = open(res.model)
+            serializer.validated_data['optimized_model'] = res_model_file
+            res_model_file.close()
+        '''
         serializer.validated_data['error'] = res.error
-
         serializer.save()
         headers = self.get_success_headers(serializer.data)
         os.remove(tsv_path)
         os.remove(model_path)
-        
+
         return Response(serializer.data)

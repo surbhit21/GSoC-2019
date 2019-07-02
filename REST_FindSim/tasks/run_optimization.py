@@ -3,12 +3,12 @@ import re
 import zipfile
 import os
 
-from .utility import *
-from run_findSim import run_findSim
+from .utility import OptimizationResult, parse_output, decode_bytes
+from .run_findSim import run_findSim
 
 
 def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_processes = 2, tolerance = 1e-4):
-    t_result = OptimizaResult()
+    t_result = OptimizationResult()
 
     # Validation of .tsv file and modle file
     fs = tsv_zip.split('.')
@@ -24,31 +24,41 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
 
     # Unzip .tsv files and save them into a directory
     f = zipfile.ZipFile(tsv_zip, 'r')
-    for file in f.nameliset():
-        f.extract(file,'files/tsv')
+    for file in f.namelist():
+        f.extract(file,'files/tsv/'+file_label)
     f.close()
 
     # Firstly, run findSim to generate parameters list for each .tsv file
-    tsv_file_path = 'files/tsv/' + tsv_zip[0:len(tsv_zip)-4]
+    tsv_file_path = tsv_zip[0:len(tsv_zip)-4]
 
     # Record parameters in a dictionary
     param_list_d = {}
 
     for root, dirs, files in os.walk(tsv_file_path, topdown=False):
+        # Check if there exists files
+        if len(files) == 0:
+            t_result.set_error("No .tsv file in directory")
+            return t_result
         # For each .tsv file in the directory
         for file in files:
             # Run findSim to generate param list, use '-p'
             tmp_param_list_path = os.path.join(root,"tmp_param_list.txt")
             # Set param file : tmp_param_list_path
             # and set hp : True
-            run_findSim( file, model_file , "", tmp_param_list_path, True)
+            # Check if there exists wrong file type
+            if file.split('.')[-1] != 'tsv':
+                t_result.set_error("Wrong file type in directory: "+file)
+                return t_result
+            # Run FindSim
+            tmp_file_path = os.path.join(root,file)
+            run_findSim( tmp_file_path, model_file , "", tmp_param_list_path, True)
             # Fetch params and add them into dictionary
             try:
                 tmp_param_list = open(tmp_param_list_path, 'r+')
                 param = tmp_param_list.readline().strip()
                 # For each param
                 while param:
-                    tmp_contents = param.split(' ')
+                    tmp_contents = param.split('   ')
                     assert(len(tmp_contents) == 2)
                     param = tmp_contents[0]+'.'+tmp_contents[1]
                     if param not in param_list_d:
@@ -63,7 +73,7 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
     # Secondly, run optimization according to parameter list
     # Generate param list:
     param_list_commandline = ""
-    for param in param_list.keys():
+    for param in param_list_d.keys():
         param_list_commandline += param + ' '
     # Generate command line:
     command_Optimization = 'python third_party/FindSim/multi_param_minimization.py '\
@@ -71,18 +81,15 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
                            + ' -n ' + str(num_processes)\
                            + ' -m ' + model_file\
                            + ' -f ' + optimized_model\
-                           + ' -p ' + param_list_commandline
-    # TODO(Chen): add argument 'torlance' into command line
-    '''
-    if torlance:
-    '''
+                           + ' -p ' + param_list_commandline\
+                           + ' -t ' + str(tolerance)
+
     # Run Optimization via subprocess
-    p = subprocess.Popen(command_FindSim,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    p = subprocess.Popen(command_Optimization,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     output_info, error_info = p.communicate()
     p.wait()
-
     # Parse output
-    t_result = parse_output(decodeBytes(output_info),decodeBytes(error_info))
+    t_result = parse_output(decode_bytes(output_info),decode_bytes(error_info),"Optimization")
     t_result.set_model(optimized_model)
 
     return t_result
