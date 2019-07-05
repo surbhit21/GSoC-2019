@@ -74,6 +74,7 @@ def parse_output(output = str, error = str, output_type = str):
     if error != ""\
     or re.search('score', output, re.I) == None:
         # Error happens, parse output to get the error messege
+        '''
         if re.search('error',output, re.I) != None:
             p1 = re.compile(r'[a-zA-Z0-9.]*error.*', re.I)
             errors = p1.findall(output)
@@ -93,6 +94,8 @@ def parse_output(output = str, error = str, output_type = str):
         if errormsg == "":
             errormsg += output+error
         t_result.set_error(errormsg)
+        '''
+        t_result.set_error(output+"\naaa\n"+error)
         return t_result
 
     # No error, parse the getoutput

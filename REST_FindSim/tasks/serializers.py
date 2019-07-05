@@ -9,4 +9,4 @@ class CalculationSerializer(serializers.HyperlinkedModelSerializer):
 class OptimizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Optimization
-        fields = ('username', 'tsv_files', 'model_file', 'parameters', 'score','time','optimized_model','error')
+        fields = ('username', 'tsv_files', 'model_file', 'num_processes', 'tolerance', 'parameters', 'score','time','optimized_model','error')

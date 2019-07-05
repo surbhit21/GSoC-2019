@@ -18,6 +18,8 @@ class Optimization(models.Model):
     username        = models.TextField(blank = False, default = 'admin_HC')
     tsv_files       = models.FileField(blank = False, upload_to = "files/tsv/")
     model_file      = models.FileField(blank = False, upload_to = "files/model/")
+    num_processes   = models.DecimalField(blank = True, default = 2, max_digits=3, decimal_places=0)
+    tolerance       = models.DecimalField(blank = True, default = 1e-4, max_digits=10, decimal_places=9)
     # Output
     parameters      = models.TextField(blank = False, null = False, editable = False)
     score           = models.TextField(blank = True, null = True, editable = False)

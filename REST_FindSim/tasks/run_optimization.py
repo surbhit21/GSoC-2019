@@ -7,7 +7,7 @@ from .utility import OptimizationResult, parse_output, decode_bytes
 from .run_findSim import run_findSim
 
 
-def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_processes = 2, tolerance = 1e-4):
+def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_processes, tolerance):
     t_result = OptimizationResult()
 
     # Validation of .tsv file and modle file
@@ -85,6 +85,7 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
                            + ' -t ' + str(tolerance)
 
     # Run Optimization via subprocess
+    print(command_Optimization)
     p = subprocess.Popen(command_Optimization,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     output_info, error_info = p.communicate()
     p.wait()

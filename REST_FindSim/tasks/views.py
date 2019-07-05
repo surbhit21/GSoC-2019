@@ -78,20 +78,24 @@ class OptimizationViewSet(viewsets.ModelViewSet):
 
         # define optimized model name
         optimized_model = 'files/model/' + file_label + '/optimized/' + model_path_new.split('/').pop()
+
+        # Get num_processes & tolerance
+        tolerance = serializer.validated_data['tolerance']
+        num_processes = serializer.validated_data['num_processes']
         # Run optimization via subprocess
-        res = run_optimization(tsv_path_new, model_path_new, file_label, optimized_model)
+        res = run_optimization(tsv_path_new, model_path_new, file_label, optimized_model, num_processes, tolerance)
         #os.remove(tsv_path_new)
         #os.remove(model_path_new)
 
         serializer.validated_data['score'] = res.score
         serializer.validated_data['time'] = res.time
         serializer.validated_data['parameters'] = json.dumps(res.parameters)
-        '''
+
         if not res.has_error():
             res_model_file = open(res.model)
-            serializer.validated_data['optimized_model'] = res_model_file
+            serializer.validated_data['optimized_model'] = optimized_model
             res_model_file.close()
-        '''
+
         serializer.validated_data['error'] = res.error
         serializer.save()
         headers = self.get_success_headers(serializer.data)
@@ -99,3 +103,14 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         os.remove(model_path)
 
         return Response(serializer.data)
+
+def DownLoadApiView(request):
+
+    f_path = request.path
+    f_name = f_path.split('/').pop()
+    if request.method == "GET":
+        file = open(f_path, 'rb')
+        response = HttpResponse(file)
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename=f_name'
+        return response
