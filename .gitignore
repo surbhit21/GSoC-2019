@@ -103,5 +103,5 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-#Edited by Chen
-/REST_FindSim/files/
+# Edited by Chen
+/REST_FindSim/media/files/

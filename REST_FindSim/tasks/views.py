@@ -14,6 +14,7 @@ import json
 import zipfile
 import time
 
+BASE_FILE_PATH = 'media/files/'
 
 # Create your views here.
 class CalculationViewSet(viewsets.ModelViewSet):
@@ -22,12 +23,15 @@ class CalculationViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
 
+        global BASE_FILE_PATH
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         #parse the path to .tsv file and model file
-        tsv_path = 'files/tsv/'+ serializer.validated_data['tsv_file'].name.split('/').pop()
-        model_path = 'files/model/'+ serializer.validated_data['model_file'].name.split('/').pop()
+
+        tsv_path = os.path.join(BASE_FILE_PATH, 'tsv/') + serializer.validated_data['tsv_file'].name
+        model_path = os.path.join(BASE_FILE_PATH, 'model/') + serializer.validated_data['model_file'].name
+
         res = run_findSim(tsv_path,model_path)
         os.remove(tsv_path)
         os.remove(model_path)
@@ -51,20 +55,21 @@ class OptimizationViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
 
+        global BASE_FILE_PATH
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         #parse the path to .tsv file and model file
-        tsv_path = 'files/tsv/'+ serializer.validated_data['tsv_files'].name.split('/').pop()
-        model_path = 'files/model/'+ serializer.validated_data['model_file'].name.split('/').pop()
+        tsv_path = os.path.join(BASE_FILE_PATH, 'tsv/') + serializer.validated_data['tsv_files'].name.split('/').pop()
+        model_path = os.path.join(BASE_FILE_PATH, 'model/') + serializer.validated_data['model_file'].name.split('/').pop()
         file_label = serializer.validated_data['username'] + str(time.time())
-        os.mkdir('files/tsv/'+file_label)
-        os.mkdir('files/model/'+file_label)
-        os.mkdir('files/model/'+file_label+'/optimized')
-        tsv_path_new = 'files/tsv/'+ file_label +'/'+ serializer.validated_data['tsv_files'].name.split('/').pop()
-        model_path_new = 'files/model/'+ file_label +'/'+ serializer.validated_data['model_file'].name.split('/').pop()
-
+        os.mkdir(os.path.join(BASE_FILE_PATH, 'tsv/')+file_label)
+        os.mkdir(os.path.join(BASE_FILE_PATH, 'model/')+file_label)
+        os.mkdir(os.path.join(BASE_FILE_PATH, 'model/')+file_label+'/optimized')
+        tsv_path_new = os.path.join(BASE_FILE_PATH, 'tsv/'+file_label+'/') + serializer.validated_data['tsv_files'].name
+        model_path_new = os.path.join(BASE_FILE_PATH, 'model/' + file_label+'/') + serializer.validated_data['model_file'].name
+        print(tsv_path_new)
         # Rename the files to avoid collision
         if os.path.exists(tsv_path):
             os.rename(tsv_path, tsv_path_new)
@@ -77,7 +82,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
             serializer.validated_data['error'] = 'model file not found'
 
         # define optimized model name
-        optimized_model = 'files/model/' + file_label + '/optimized/' + model_path_new.split('/').pop()
+        optimized_model = os.path.join(BASE_FILE_PATH, 'model/') + file_label + '/optimized/' + model_path_new.split('/').pop()
 
         # Get num_processes & tolerance
         tolerance = serializer.validated_data['tolerance']
@@ -93,7 +98,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
 
         if not res.has_error():
             res_model_file = open(res.model)
-            serializer.validated_data['optimized_model'] = optimized_model
+            serializer.validated_data['optimized_model'] = optimized_model[6:]
             res_model_file.close()
 
         serializer.validated_data['error'] = res.error
@@ -103,14 +108,3 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         os.remove(model_path)
 
         return Response(serializer.data)
-
-def DownLoadApiView(request):
-
-    f_path = request.path
-    f_name = f_path.split('/').pop()
-    if request.method == "GET":
-        file = open(f_path, 'rb')
-        response = HttpResponse(file)
-        response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = 'attachment;filename=f_name'
-        return response

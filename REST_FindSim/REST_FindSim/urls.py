@@ -18,6 +18,9 @@ from django.urls import path
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 from tasks import views
+# For download files
+from django.views.static import serve
+from django.conf import settings
 
 router = DefaultRouter()
 router.register(r'tasks/Calculation', views.CalculationViewSet)
@@ -27,5 +30,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('^tasks/Optimization/files/(?P<path>.*)$', views.DownLoadApiView, name="download"),
+    # download files
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

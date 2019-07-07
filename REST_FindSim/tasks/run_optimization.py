@@ -25,7 +25,7 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
     # Unzip .tsv files and save them into a directory
     f = zipfile.ZipFile(tsv_zip, 'r')
     for file in f.namelist():
-        f.extract(file,'files/tsv/'+file_label)
+        f.extract(file,'media/files/tsv/'+file_label)
     f.close()
 
     # Firstly, run findSim to generate parameters list for each .tsv file

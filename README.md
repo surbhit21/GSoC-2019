@@ -63,7 +63,9 @@ This will be a working implementation of a RESTful API to run FindSim experiment
 
 |  url   | POST | GET |
 |  ----  | ----  | ---- |
-| /tasks/ | Give username, upload .tsv file and model(.g or .xml) file.<br>Response score, running time and experiemnt result figure |  response all tasks|
+| /tasks/Calculation/ | Give username, upload .tsv file and model(.g or .xml) file.<br>Response score, running time and experiemnt result figure |  response all calculation tasks|
+| /tasks/Optimization/ | Give username, upload .tsv files(in a .zip file) and model(.g or .xml) file and other arguments.<br>Response a parameters list, score, running time and url of optimized model file |  response all Optimization tasks|
+| /media/files/model/<unique_url_for_a_optimization_task> | - | Download optimized model file |
 
 
 1. url: /tasks/
