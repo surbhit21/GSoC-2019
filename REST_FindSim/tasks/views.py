@@ -13,6 +13,7 @@ import os
 import json
 import zipfile
 import time
+import shutil
 
 BASE_FILE_PATH = 'media/files/'
 
@@ -83,14 +84,17 @@ class OptimizationViewSet(viewsets.ModelViewSet):
 
         # define optimized model name
         optimized_model = os.path.join(BASE_FILE_PATH, 'model/') + file_label + '/optimized/' + model_path_new.split('/').pop()
-
+        optimized_model_url = os.path.join(BASE_FILE_PATH, 'model/') + file_label + '/optimized/'
+        optimized_model_url = optimized_model_url + serializer.validated_data['model_file'].name.split('.')[0] \
+                              + '_tweaked.' + serializer.validated_data['model_file'].name.split('.')[1]
+        optimized_model_url = optimized_model_url[6:]                      
         # Get num_processes & tolerance
         tolerance = serializer.validated_data['tolerance']
         num_processes = serializer.validated_data['num_processes']
         # Run optimization via subprocess
         res = run_optimization(tsv_path_new, model_path_new, file_label, optimized_model, num_processes, tolerance)
-        #os.remove(tsv_path_new)
-        #os.remove(model_path_new)
+        os.remove(model_path_new)
+        shutil.rmtree(os.path.join(BASE_FILE_PATH, 'tsv/')+file_label)
 
         serializer.validated_data['score'] = res.score
         serializer.validated_data['time'] = res.time
@@ -98,7 +102,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
 
         if not res.has_error():
             res_model_file = open(res.model)
-            serializer.validated_data['optimized_model'] = optimized_model[6:]
+            serializer.validated_data['optimized_model'] = optimized_model_url
             res_model_file.close()
 
         serializer.validated_data['error'] = res.error

@@ -68,25 +68,55 @@ This will be a working implementation of a RESTful API to run FindSim experiment
 | /media/files/model/<unique_url_for_a_optimization_task> | - | Download optimized model file |
 
 
-1. url: /tasks/
+1. url: /tasks/Calculation/
 
     POST:  
-    {
-    'username': provided by
+    {  
+    'username': provided by front-end  
     'tsv_file': .tsv file  
     'model_file': model file(.g or .xml)  
     }  
 
 
     Response:  
-    A task info:
+    A task info:  
     {  
     'score': score of experiment  
     'time': cost time  
     'figure': html string of the figure  
     'error': infomations when error happens  
-    }
+    }  
 
     GET:  
     Response:  
-   A list of tasks.
+    A list of calculation tasks.  
+
+2. url: /tasks/Optimization/
+
+    POST:  
+    {  
+    'username': provided by front-end  
+    'tsv_files': a .zip file contains only .tsv files  
+    'model_file': model file(.g or .xml)  
+    'num_processes': parameters for running optimization(integer)  
+    'tolerance': parameters for running optimization(float point number under 1.0)  
+    }  
+
+    Response:  
+    A task info:  
+    {  
+    'parameters': parameter list according to .tsv files  
+    'score': score of experiment  
+    'time': cost time  
+    'optimized_model': url for downloading model file  
+    'error': infomations when error happens  
+    }  
+
+    GET:  
+    Response:  
+    A list of optimization tasks.  
+
+3. url: In the response of API-2
+
+    GET:
+    response: downloading modle file.
