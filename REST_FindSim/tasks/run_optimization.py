@@ -29,27 +29,30 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
     f.close()
 
     # Firstly, run findSim to generate parameters list for each .tsv file
-    tsv_file_path = tsv_zip[0:len(tsv_zip)-4]
+    # tsv_file_path = tsv_zip[0:len(tsv_zip)-4]
+    tsv_file_path = 'media/files/tsv/'+file_label
+    tsv_file_path_new = os.path.join(tsv_file_path, 'tsv_files')
+    os.mkdir(tsv_file_path_new)
 
     # Record parameters in a dictionary
     param_list_d = {}
-
+    # Record num of tsv files
+    tsv_cnt = 0
+    # output file of findSim: param list
+    tmp_param_list_path = os.path.join('media/files/tsv/'+file_label,"tmp_param_list.txt")
+    # Traverse through directory
     for root, dirs, files in os.walk(tsv_file_path, topdown=False):
-        # Check if there exists files
-        if len(files) == 0:
-            t_result.set_error("No .tsv file in directory")
-            return t_result
         # For each .tsv file in the directory
         for file in files:
+            # Check if this is a .tsv file:
+            if file.split('.')[-1] != 'tsv':
+                continue
+            else:
+                tsv_cnt += 1
             # Run findSim to generate param list, use '-p'
-            tmp_param_list_path = os.path.join(root,"tmp_param_list.txt")
             # Set param file : tmp_param_list_path
             # and set hp : True
             # Check if there exists wrong file type
-            if file.split('.')[-1] != 'tsv':
-                t_result.set_error("Wrong file type in directory: "+file)
-                return t_result
-            # Run FindSim
             tmp_file_path = os.path.join(root,file)
             run_findSim( tmp_file_path, model_file , "", tmp_param_list_path, True)
             # Fetch params and add them into dictionary
@@ -69,6 +72,12 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
                 return t_result
             else:
                 tmp_param_list.close()
+            os.rename(tmp_file_path, os.path.join(tsv_file_path_new,file))
+    # Check if there exists files
+    if tsv_cnt == 0:
+        t_result.set_error("No .tsv file in directory")
+        return t_result
+    print("Collected %d .tsv files." % tsv_cnt)
 
     # Secondly, run optimization according to parameter list
     # Generate param list:
@@ -77,7 +86,7 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
         param_list_commandline += param + ' '
     # Generate command line:
     command_Optimization = 'python third_party/FindSim/multi_param_minimization.py '\
-                           + tsv_file_path\
+                           + tsv_file_path_new\
                            + ' -n ' + str(num_processes)\
                            + ' -m ' + model_file\
                            + ' -f ' + optimized_model\
@@ -92,5 +101,8 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
     # Parse output
     t_result = parse_output(decode_bytes(output_info),decode_bytes(error_info),"Optimization")
     t_result.set_model(optimized_model)
+    if not t_result.parameters:
+        for param in param_list_commandline.split(' '):
+            t_result.add_parameter(param)
 
     return t_result

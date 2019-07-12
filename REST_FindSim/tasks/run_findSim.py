@@ -27,7 +27,7 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
         command_FindSim += ' -p ' + paramFname
     if hidePlot:
         command_FindSim += ' -hp'
-    
+
     # TODO(Chen): add other arguments into command line
     '''
     if dumpFname:
