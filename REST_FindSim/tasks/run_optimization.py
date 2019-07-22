@@ -42,6 +42,8 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
     tmp_param_list_path = os.path.join('media/files/tsv/'+file_label,"tmp_param_list.txt")
     # Traverse through directory
     for root, dirs, files in os.walk(tsv_file_path, topdown=False):
+        if root == tsv_file_path_new:
+            continue;
         # For each .tsv file in the directory
         for file in files:
             # Check if this is a .tsv file:

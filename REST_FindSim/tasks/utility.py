@@ -1,5 +1,7 @@
 import re
 
+BEDUGFLAG = True
+
 # Result data structure:
 # Atfer running the task, return this to front-end/client
 class FindSimResult():
@@ -75,7 +77,8 @@ def parse_output(output = str, error = str, output_type = str):
     or re.search('score', output, re.I) == None\
     or re.search('error', output, re.I) != None:
         # Error happens, parse output to get the error messege
-
+        print(output)
+        print(error)
         if re.search('error',output, re.I) != None:
             p1 = re.compile(r'[a-zA-Z0-9.]*error.*', re.I)
             errors = p1.findall(output)

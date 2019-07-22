@@ -2,6 +2,7 @@ import subprocess
 import re
 
 from .utility import FindSimResult, parse_output, decode_bytes
+
 #from third_party.FindSim.findSim import *
 
 
@@ -40,6 +41,7 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
 
     # Run FindSim via subprocess
     # output = subprocess.getoutput(command_FindSim)
+    print(command_FindSim)
     p = subprocess.Popen(command_FindSim,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     output_info, error_info = p.communicate()
 

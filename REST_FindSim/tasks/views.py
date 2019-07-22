@@ -93,7 +93,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         num_processes = serializer.validated_data['num_processes']
         # Run optimization via subprocess
         res = run_optimization(tsv_path_new, model_path_new, file_label, optimized_model, num_processes, tolerance)
-        os.remove(model_path_new)
+        # os.remove(model_path_new)
         # shutil.rmtree(os.path.join(BASE_FILE_PATH, 'tsv/')+file_label)
 
         serializer.validated_data['score'] = res.score
