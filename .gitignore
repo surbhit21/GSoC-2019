@@ -104,4 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # Edited by Chen
-/REST_FindSim/media/files/
+/REST_FindSim/media/files/tsv/*/
+/REST_FindSim/media/files/model/*/
+/REST_FindSim/media/files/tsv/!README.md
+/REST_FindSim/media/files/model/!README.md

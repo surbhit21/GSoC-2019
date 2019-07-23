@@ -1,4 +1,4 @@
 # GSoC-2019
 Google Summer of Code 2019 project
 
-Upload files to this directory.
+Upload tsv files to this directory.
