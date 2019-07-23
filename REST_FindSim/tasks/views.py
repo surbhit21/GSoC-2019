@@ -65,9 +65,9 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         tsv_path = os.path.join(BASE_FILE_PATH, 'tsv/') + serializer.validated_data['tsv_files'].name.split('/').pop()
         model_path = os.path.join(BASE_FILE_PATH, 'model/') + serializer.validated_data['model_file'].name.split('/').pop()
         file_label = serializer.validated_data['username'] + str(time.time())
-        os.mkdir(os.path.join(BASE_FILE_PATH, 'tsv/')+file_label)
-        os.mkdir(os.path.join(BASE_FILE_PATH, 'model/')+file_label)
-        os.mkdir(os.path.join(BASE_FILE_PATH, 'model/')+file_label+'/optimized')
+        os.makedirs(os.path.join(BASE_FILE_PATH, 'tsv/')+file_label)
+        os.makedirs(os.path.join(BASE_FILE_PATH, 'model/')+file_label)
+        os.makedirs(os.path.join(BASE_FILE_PATH, 'model/')+file_label+'/optimized')
         tsv_path_new = os.path.join(BASE_FILE_PATH, 'tsv/'+file_label+'/') + serializer.validated_data['tsv_files'].name
         model_path_new = os.path.join(BASE_FILE_PATH, 'model/' + file_label+'/') + serializer.validated_data['model_file'].name
         print(tsv_path_new)
@@ -93,8 +93,8 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         num_processes = serializer.validated_data['num_processes']
         # Run optimization via subprocess
         res = run_optimization(tsv_path_new, model_path_new, file_label, optimized_model, num_processes, tolerance)
-        # os.remove(model_path_new)
-        # shutil.rmtree(os.path.join(BASE_FILE_PATH, 'tsv/')+file_label)
+        os.remove(model_path_new)
+        shutil.rmtree(os.path.join(BASE_FILE_PATH, 'tsv/')+file_label)
 
         serializer.validated_data['score'] = res.score
         serializer.validated_data['time'] = res.time
