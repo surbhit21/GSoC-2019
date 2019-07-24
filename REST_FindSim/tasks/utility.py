@@ -62,6 +62,7 @@ class OptimizationResult():
 # If the output pattern is changed, change the code here
 # for adjustment.
 def parse_output(output = str, error = str, output_type = str):
+    print(output)
     if output_type == 'Calculation':
         t_result = FindSimResult()
     elif output_type == 'Optimization':
@@ -74,11 +75,9 @@ def parse_output(output = str, error = str, output_type = str):
     # Get result from stdout output strings
     # Check if there is error or exception
     if error != ""\
-    or re.search('score', output, re.I) == None\
-    or re.search('error', output, re.I) != None:
+    or re.search('score', output, re.I) == None:
+    # or re.search('error', output, re.I) != None:
         # Error happens, parse output to get the error messege
-        print(output)
-        print(error)
         if re.search('error',output, re.I) != None:
             p1 = re.compile(r'[a-zA-Z0-9.]*error.*', re.I)
             errors = p1.findall(output)
@@ -103,11 +102,15 @@ def parse_output(output = str, error = str, output_type = str):
 
     # No error, parse the getoutput
     if output_type == 'Calculation':
+        # locate '[Fgure]'
         f_loc = output.find('[Figure]')
         res_output = output[0:f_loc]
         res_figure = output[f_loc+len('[Figure]'):]
+        # locate 'Score'
+        s_loc = res_output.find('Score')
+        res_output = res_output[s_loc:]
         outs = res_output.split(' ')
-
+        # get score and time
         t_result.set_score(outs[2])
         t_result.set_time(outs[6])
         t_result.set_figure(res_figure)

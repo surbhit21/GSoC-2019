@@ -34,6 +34,7 @@ This will be a working implementation of a RESTful API to run FindSim experiment
     + Django
     + djangorestframework
     + scipy
+    + requests
 
 - install moose
 ```

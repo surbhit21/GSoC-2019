@@ -15,7 +15,7 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
         t_result.set_error('Invalid script file type.')
     fs = []
     fs = modelFile.split('.')
-    if len(fs) < 2 or (fs[-1] != 'g' and fs[-1] != 'xml'):
+    if len(fs) < 2 or (fs[-1] != 'g' and fs[-1] != 'xml' and fs[-1] != 'py'):
         t_result.set_error('Invalid model file type.')
 
     if t_result.error:

@@ -1,6 +1,16 @@
 from django.db import models
 from REST_FindSim.settings import BASE_DIR
 
+# TODO(Chen): use these function to upload_to
+def tsv_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'files/tsv/{0}_at_{1}'.format(instance.username, str(time.time()))
+
+def model_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'files/model/{0}_at_{1}'.format(instance.username, str(time.time()))
+
+
 # Create your models here.
 class Calculation(models.Model):
     # Input
