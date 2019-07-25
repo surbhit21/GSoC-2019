@@ -1,6 +1,5 @@
 import re
 
-BEDUGFLAG = True
 
 # Result data structure:
 # Atfer running the task, return this to front-end/client
@@ -62,7 +61,7 @@ class OptimizationResult():
 # If the output pattern is changed, change the code here
 # for adjustment.
 def parse_output(output = str, error = str, output_type = str):
-    print(output)
+
     if output_type == 'Calculation':
         t_result = FindSimResult()
     elif output_type == 'Optimization':
