@@ -25,9 +25,12 @@ def run_InnerMain():
     #output = subprocess.getoutput(command_FindSim)
     innerMain( args.script, modelFile = args.model, dumpFname = args.dump_subset, paramFname = args.param_file, hidePlot = args.hide_plot, hideSubplots = args.hide_subplots, optimizeElec = args.optimize_elec, scaleParam = args.scale_param, settleTime = args.settle_time )
 
-    res_figure = mpld3.fig_to_html(pyplot.figure(1))
+    fig = pyplot.figure(1)
+    res_figure = mpld3.fig_to_html(fig)
     pyplot.close()
     print('[Figure]'+ res_figure)
+
+
     return
 
 if __name__ == '__main__':
