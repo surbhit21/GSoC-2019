@@ -108,6 +108,11 @@ class TestAPIs(unittest.TestCase):
 
     def test_calculation_BC(self):
         """ Test calculation. Type: BarChart """
+        # bc_ratio_sb8.tsv
+        tsv = os.path.join(TSV_DIR, 'bc_ratio_sb8.tsv')
+        model = os.path.join(MODEL_DIR, 'synSynth7.g')
+        r = http_request_calculation(tsv,model)
+        self.handle_response(r)
 
     def test_calculation_TS(self):
         """ Test calculation. Type: TimeSeries """
