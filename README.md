@@ -3,11 +3,17 @@ Google Summer of Code 2019 project
 
 This will be a working implementation of a RESTful API to run FindSim experiment on NSG (https://www.nsgportal.org/) server.
 
-### RESTful API
 
-#### 1. Implementing FindSim & Setting up environment
+## Contents:
 
-##### Pre-requisites:
+* [1.Implementing](#1)
+* [2.RESTful APIs](#2)
+* [3.Testing](#3)
+
+
+<h2 id="1">1. Implementing FindSim & Setting up environment</h2>
+
+#### Pre-requisites:
 
 - Moose (https://github.com/BhallaLab/moose)
 - FindSim (https://github.com/BhallaLab/FindSim)
@@ -15,7 +21,7 @@ This will be a working implementation of a RESTful API to run FindSim experiment
 - Python3 virtualenv
 - Django, djangorestframework
 
-##### Turorial
+#### Turorial
 - Install Python3
 - Set up Python3 venv(optional)
 - Install following packages via apt:
@@ -46,20 +52,10 @@ This will be a working implementation of a RESTful API to run FindSim experiment
     > ln -s path/to/your/FindSim REST_FindSim/third_party/FindSim
 ```
 
-#### 2. RESTful APIs:
+<h2 id="2">2. RESTful APIs</h2>
 
 
-**The major source is 'task', which contains:**
-
- - An username
- - A .tsv file
- - A model file
- -  A score
- -  A run time
- -  A mpld3 figure showing experiment results
- -  An error-info buffer, stores error command line output when error happens(empty if no error happens)
-
-**By now, there are following APIs:**  
+ #### By now, there are following APIs:  
 
 |  url   | POST | GET |
 |  ----  | ----  | ---- |
@@ -120,3 +116,12 @@ This will be a working implementation of a RESTful API to run FindSim experiment
 
     GET:
     response: downloading modle file.
+
+    
+
+<h2 id="3">3.Testing</h2>
+
+#### Running TestCase to test models:
+
+> cd REST_FindSim
+> ./manage.py test tasks.tests
