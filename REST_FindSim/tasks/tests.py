@@ -13,19 +13,31 @@ import argparse
 TSV_ZIP_PATH = 'test_files/test_opt.zip'
 MODEL_DIR = 'test_files/model/'
 TSV_DIR = 'test_files/tsv/'
+HTML_DIR = 'test_files/output/html/'
 OUTPUT_STATUS = True
-OUTPUT_JSON = True
+OUTPUT_JSON = False
+OUTPUT_HTML = True
+TIME_STAMP = ''
 
 class TestCalculation(TestCase):
+
+    # Open output html file:
+    @classmethod
+    def setUpClass(cls):
+        global TIME_STAMP
+        TIME_STAMP = time.strftime("%Y_%m_%d_%H:%M:%S", time.localtime())
 
     # Output necessary info;
     # Check if there is errors.
     def handle_response(self,response):
+        self.assertEqual('', response.json()['error'])
+        # Output some info
         if OUTPUT_STATUS:
             print('Status: '+str(response.status_code))
         if OUTPUT_JSON:
             print(response.json())
-        self.assertEqual('', response.json()['error'])
+        if OUTPUT_HTML:
+            self.html_file.write(response.json()['figure'])
 
     # According to tsv_path and model_path,
     # send REST request django.test.Client
@@ -45,6 +57,13 @@ class TestCalculation(TestCase):
         self.test_client = Client()
         # set url
         self.test_url = reverse('calculation-list')
+        # Open file
+        html_path = TIME_STAMP + '.html'
+        html_path = os.path.join(HTML_DIR, html_path)
+        self.html_file = open(html_path,"a")
+
+    def tearDown(self):
+        self.html_file.close()
 
     def test_calculation_BC(self):
         """ Test calculation. Type: BarChart """
@@ -125,7 +144,7 @@ class TestCalculation(TestCase):
         ts_ratio_t2a.tsv synSynth7.g
         vclamp_hh.tsv loadhh.py
     '''
-
+'''
 class TestOptimization(TestCase):
 
     # Output necessary info;
@@ -173,3 +192,4 @@ class TestOptimization(TestCase):
         model = os.path.join(MODEL_DIR, 'Gs_To_PKA_31_May_2019.g')
         r = self.send_request(6, 0.6, tsvs, model)
         self.handle_response(r)
+'''

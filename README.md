@@ -117,11 +117,11 @@ This will be a working implementation of a RESTful API to run FindSim experiment
     GET:
     response: downloading modle file.
 
-    
+
 
 <h2 id="3">3.Testing</h2>
 
 #### Running TestCase to test models:
 
-> cd REST_FindSim
-> ./manage.py test tasks.tests
+> cd REST_FindSim  
+> ./manage.py test tasks.tests  
