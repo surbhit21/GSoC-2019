@@ -1,5 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 from django.test import Client
+from django.test import tag
 from django.urls import reverse
 
 import os
@@ -15,7 +16,7 @@ MODEL_DIR = 'test_files/model/'
 TSV_DIR = 'test_files/tsv/'
 HTML_DIR = 'test_files/output/html/'
 OUTPUT_STATUS = True
-OUTPUT_JSON = False
+OUTPUT_JSON = True
 OUTPUT_HTML = True
 TIME_STAMP = ''
 
@@ -26,6 +27,10 @@ class TestCalculation(TestCase):
     def setUpClass(cls):
         global TIME_STAMP
         TIME_STAMP = time.strftime("%Y_%m_%d_%H:%M:%S", time.localtime())
+
+    @classmethod
+    def tearDownClass(cls):
+        print('-------Testing calculation finished-------')
 
     # Output necessary info;
     # Check if there is errors.
@@ -65,6 +70,7 @@ class TestCalculation(TestCase):
     def tearDown(self):
         self.html_file.close()
 
+    @tag('BC','calculation')
     def test_calculation_BC(self):
         """ Test calculation. Type: BarChart """
         # bc_ratio_sb8.tsv
@@ -73,6 +79,7 @@ class TestCalculation(TestCase):
         r = self.send_request(tsv,model)
         self.handle_response(r)
 
+    @tag('DP','calculation')
     def test_calculation_DP(self):
         """ Test calculation. Type: DirectParameter """
         # dp_Kd_tau.tsv
@@ -86,6 +93,7 @@ class TestCalculation(TestCase):
         r = self.send_request(tsv,model)
         self.handle_response(r)
 
+    @tag('DR','calculation')
     def test_calculation_DR(self):
         """ Test calculation. Type: DoseResponse """
         # dr_ratio_b2c.tsv
@@ -99,6 +107,7 @@ class TestCalculation(TestCase):
         r = self.send_request(tsv,model)
         self.handle_response(r)
 
+    @tag('TS','calculation')
     def test_calculation_TS(self):
         """ Test calculation. Type: TimeSeries """
         # iclamp_hh13.tsv
@@ -144,7 +153,7 @@ class TestCalculation(TestCase):
         ts_ratio_t2a.tsv synSynth7.g
         vclamp_hh.tsv loadhh.py
     '''
-'''
+
 class TestOptimization(TestCase):
 
     # Output necessary info;
@@ -178,6 +187,7 @@ class TestOptimization(TestCase):
         self.test_url = reverse('optimization-list')
 
     # With num_processes as '1'
+    @tag('optimization')
     def test_single_process(self):
         """ Test optimization request: multi processes """
         tsvs = TSV_ZIP_PATH
@@ -186,10 +196,27 @@ class TestOptimization(TestCase):
         self.handle_response(r)
 
     # With num_processes more than '1'
+    @tag('optimization')
     def test_multi_process(self):
         """ Test optimization request: single process """
         tsvs = TSV_ZIP_PATH
         model = os.path.join(MODEL_DIR, 'Gs_To_PKA_31_May_2019.g')
         r = self.send_request(6, 0.6, tsvs, model)
         self.handle_response(r)
-'''
+
+# django.SimpleTestCase is guaranteed to be ran after django.TestCase
+# This class is for printing info after tests.
+class TestFinishing(SimpleTestCase):
+
+    @tag('TS','BC','DR','DP','calculation')
+    def test_finishing(self):
+        print('-------TestCases finished-------')
+
+        html_path = TIME_STAMP + '.html'
+        html_path = os.path.join(HTML_DIR, html_path)
+        if OUTPUT_HTML:
+            print('==================================================Notice==================================================')
+            print('||')
+            print('|| You can find figures in ', html_path)
+            print('||')
+            print('==========================================================================================================')
