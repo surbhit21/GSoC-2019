@@ -16,7 +16,7 @@ This will be a working implementation of a RESTful API to run FindSim experiment
 #### About FindSim
 
 
-Framework for Integrating Neuronal Data and Signaling Models (FindSim) is a tool that enable systematic validation and optimization of a neuronal signaling model by anchoring a model to actual experiment dataset. It is a framework for integrating many individual electrophysiological and biochemical experiments with large, multiscale models so as to systematically refine and validate the model. We use a structured format for encoding the conditions of many standard physiological and pharmacological experiments, specifying which parts of the model are involved, and comparing experiment outcomes  with model output. A database of such experiments is run against successive generations of composite cellular models to iteratively improve the model against each experiment, while retaining global model validity. This toolchain provides a principled and scalable way to tackle model complexity and diversity of data sources.
+Framework for Integrating Neuronal Data and Signaling Models (FindSim) is a tool that enable systematic validation and optimization of a neuronal signaling model by anchoring a model to actual experiment dataset. It is a framework for integrating many individual electrophysiological and biochemical experiments with large, multiscale models so as to systematically refine and validate the model. We use a structured format for encoding the conditions of many standard physiological and pharmacological experiments, specifying which parts of the model are involved, and comparing experiment outcomes  with model output. A database of such experiments is run against successive generations of composite cellular models to iteratively improve the model against each experiment, while retaining global model validity. This toolchain provides a principled and scalable way to tackle model complexity and diversity of data sources.  
 (For more information go to https://www.frontiersin.org/articles/10.3389/fninf.2018.00038/full)
 
 
@@ -76,7 +76,7 @@ We also have web-based tool named FindSim-drupal(See https://github.com/BhallaLa
 
 - Clone this code into whatever you want.
 - Enter "REST_FindSim/" and run:
-> python manage.py migrate
+    > python manage.py migrate
 
 ##### Installing FindSim:
 
@@ -85,6 +85,17 @@ We also have web-based tool named FindSim-drupal(See https://github.com/BhallaLa
     > git clone https://github.com/BhallaLab/FindSim.git
 
     > ln -s path/to/your/FindSim REST_FindSim/third_party/FindSim
+
+#### Start API-Server
+
+- Enter "REST_FindSim/" and run:
+    > python manage.py runserver
+
+and you can get this ouput if everything works fine:
+
+    > Django version 2.2.1, using settings 'REST_FindSim.settings'
+      Starting development server at http://127.0.0.1:8000/
+      Quit the server with CONTROL-C.
 
 #### APIs' User Guide
 
