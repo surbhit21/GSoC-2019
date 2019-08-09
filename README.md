@@ -74,7 +74,7 @@ We also have web-based tool named FindSim-drupal(See https://github.com/BhallaLa
 
 ##### Installing APIs:
 
-- Clone this code into whatever you want.
+- Clone this code into wherever you want.
 - Enter "REST_FindSim/" and run:
     > python manage.py migrate
 
@@ -91,7 +91,7 @@ We also have web-based tool named FindSim-drupal(See https://github.com/BhallaLa
 - Enter "REST_FindSim/" and run:
     > python manage.py runserver
 
-and you can get this ouput if everything works fine:
+and you can get this output if everything works fine:
 
     > Django version 2.2.1, using settings 'REST_FindSim.settings'
       Starting development server at http://127.0.0.1:8000/
@@ -100,68 +100,68 @@ and you can get this ouput if everything works fine:
 #### APIs' User Guide
 
 The examples in this guide use the unix curl command and assume you have set the following environment variables(replace the 'your_base_url' and 'your_user_name' according to your situation):
-> export URL=your_base_url
+> export URL=your_base_url  
 > export UNAME=your_user_name
 
 ##### Submit Experiment Tasks
 
 One of the most important and basic API is to run experiments on FindSim. You need to POST your username and two files(a .tsv file and a model file) as input of FindSim.
 Using following command:
-> curl \$URL/tasks/Calculation/ \\
-> -F "username=$UNAME" \\
-> -F "tsv_file=@tsv_file_path" \\
-> -F "model_file=@model_file_path"
+> curl \$URL/tasks/Calculation/ \\  
+> -F "username=$UNAME" \\  
+> -F "tsv_file=@tsv_file_path" \\  
+> -F "model_file=@model_file_path"  
 
 Here 'tsv_file_path' and 'model_file_path' represents the .tsv file and model file you would like to upload.
 Once you've sent a POST request with correct format, it will be reguarded as a 'task'. After running in FindSim, the input and output will also be stored in the database. You will get a json as response which contains the information of your task and looks like:
 >{  
-    "username":"your_username"
-    "tsv_file": URL/media/files/tsv/your_tsv_file
-    "model_file": URL/media/files/model/your_model_file
-    'score': "0.01000000"
+    "username":"your_username"  
+    "tsv_file": URL/media/files/tsv/your_tsv_file  
+    "model_file": URL/media/files/model/your_model_file  
+    'score': "0.01000000"  
     'time': "5.00000000"  
     'figure': "\n\n<style>\n\n</style>\n\n</div>\n<script>\nfunction mpld3_load_lib(url, callback){Result mpld3 data here.}\n</script>\n"  
-    'error': ""
+    'error': ""  
     }  
 
-The 'figure' field contains html string of matplotlib plot, visualizing the result of the experiment.
+The 'figure' field contains html string of matplotlib plot, visualizing the result of the experiment.  
 If experiment ran normally, the 'error' should be an empty string, or it will contain some error info so that you can figure out what happened and how to make it right.
 
 
 ##### Submit Optimization Tasks
 
-Another basic API is to submit optimization tasks. It's quite like the submitting of experiment tasks.
-By sending POST requests like this:
-> curl \$URL/tasks/Optimization/ \\
-> -F "username=\$UNAME" \\
-> -F "num_processes=" \\
-> -F "torlance=" \\
-> -F "tsv_files=@tsv_zip_file_path" \\
-> -F "model_file=@model_file_path" \\
+Another basic API is to submit optimization tasks. It's quite like the submitting of experiment tasks.  
+By sending POST requests like this:  
+> curl \$URL/tasks/Optimization/ \\  
+> -F "username=\$UNAME" \\  
+> -F "num_processes=" \\  
+> -F "torlance=" \\  
+> -F "tsv_files=@tsv_zip_file_path" \\  
+> -F "model_file=@model_file_path" \\  
 
-you can submit and run an optimization task on the server. Notice that 'num_porcesses' and 'torlance' here are arguments for running optimizatin, and the tsv_file must be a .zip file contains at least one .tsv file.
-The responding json looks like:
+you can submit and run an optimization task on the server. Notice that 'num_porcesses' and 'torlance' here are arguments for running optimizatin, and the tsv_file must be a .zip file contains at least one .tsv file.  
+The responding json looks like:  
 > {
-        "username": "your_username",
-        "tsv_files": URL/media/files/tsv/your_tsv_zip_file
-        "model_file": URL/media/files/model/your_model_file
-        "num_processes": "1",
-        "tolerance": "0.500000000",
-        "parameters": "[\"ATP.concInit\", \"R2C2.concInit\", \"PKA_Inhibitor.concInit\", \"Reac_R2C2.Kd\", \"Reac_R2C2.tau\", \"Reac_cAMP_R2C2.Kd\", \"Reac_cAMP_R2C2.tau\", \"Reac_cAMP2_R2C2.Kd\", \"Reac_cAMP2_R2C2.tau\", \"Reac_cAMP3_R2C2.Kd\", \"Reac_cAMP3_R2C2.tau\", \"Reac_cAMP4_R2C2.Kd\", \"Reac_cAMP4_R2C2.tau\", \"Reac_cAMP4_R2C.Kd\", \"Reac_cAMP4_R2C.tau\", \"Reac_PKA_Inhibitor.Kd\", \"Reac_PKA_Inhibitor.tau\"]",
-        "score": "Init score = 0.6310, final = 0.63095591",
-        "time": "6.5020000000",
-        "optimized_model": URL/downloadUri,
-        "error": ""
-    }
+        "username": "your_username",  
+        "tsv_files": URL/media/files/tsv/your_tsv_zip_file  
+        "model_file": URL/media/files/model/your_model_file  
+        "num_processes": "1",  
+        "tolerance": "0.500000000",  
+        "parameters": "[\"ATP.concInit\", \"R2C2.concInit\", \"PKA_Inhibitor.concInit\", \"Reac_R2C2.Kd\", \"Reac_R2C2.tau\", \"Reac_cAMP_R2C2.Kd\", \"Reac_cAMP_R2C2.tau\", \"Reac_cAMP2_R2C2.Kd\", \"Reac_cAMP2_R2C2.tau\", \"Reac_cAMP3_R2C2.Kd\", \"Reac_cAMP3_R2C2.tau\", \"Reac_cAMP4_R2C2.Kd\", \"Reac_cAMP4_R2C2.tau\", \"Reac_cAMP4_R2C.Kd\", \"Reac_cAMP4_R2C.tau\", \"Reac_PKA_Inhibitor.Kd\", \"Reac_PKA_Inhibitor.tau\"]",  
+        "score": "Init score = 0.6310, final = 0.63095591",  
+        "time": "6.5020000000",  
+        "optimized_model": URL/downloadUri,  
+        "error": ""  
+    }  
 
-The "parameters" field is a list of moose name. The list is the input of optimization generated from all the .tsv files and it may be helpful if the users can acquire the full list.
-The "optimized_model" provides a "downloadUri" to users by which they can download the model file generated by optimization process.
+The "parameters" field is a list of moose name. The list is the input of optimization generated from all the .tsv files and it may be helpful if the users can acquire the full list.  
+The "optimized_model" provides a "downloadUri" to users by which they can download the model file generated by optimization process.  
 
 ##### List Tasks
 
-Send GET request and you can acquire all the submitted tasks.
-> curl $URL/tasks/Calculation/
-> curl $URL/tasks/Optimization/
+Send GET request and you can acquire all the submitted tasks.  
+> curl $URL/tasks/Calculation/  
+> curl $URL/tasks/Optimization/  
 
 Notice that any user can acquire all the tasks record or even download the output file generated by tasks that other users submitted. This may need improvements in the future.
 
@@ -175,7 +175,7 @@ and the model file will be downloaded into yout current directory.
 
 ##### Delete and cancel(Unfinished)
 
-In the future we may provide API that allow users to delete their submissions.
+In the future we may provide API that allow users to delete their submissions.  
 
 
 ##### Summary
@@ -190,20 +190,20 @@ In the future we may provide API that allow users to delete their submissions.
 
 #### Running TestCase to test models:
 
- Go to this directory and run the following command to test APIs:
+ Go to this directory and run the following command to test APIs:  
 > cd REST_FindSim  
 > ./manage.py test tasks.tests  
 
 #### Select part of the testcases:
 
-if you want to test part of the testcases. Use --tag arguments:
+if you want to test part of the testcases. Use --tag arguments:  
 > ./manage.py test tasks.tests --tag=calculation  
 
-if you get 'OK' on your command line ouput, then you have passed the test on your machine.
+if you get 'OK' on your command line ouput, then you have passed the test on your machine.  
 
-The command above will test only FindSim API.
+The command above will test only FindSim API.  
 
-- The tags we provided are:
+- The tags we provided are:  
 
 |  Tags  | Testcases |
 |  ----  | ----  |
