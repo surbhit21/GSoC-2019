@@ -110,3 +110,4 @@ venv.bak/
 /REST_FindSim/media/files/model/*.g
 /REST_FindSim/media/files/tsv/!README.md
 /REST_FindSim/media/files/model/!README.md
+/REST_FindSim/test_files/output/html/*.html

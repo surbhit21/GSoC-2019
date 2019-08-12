@@ -26,9 +26,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 SECRET_KEY = '8u3$=9^s69&5+(76zq61baa&uthkmebma=!gk-0g9*z$%glr(%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -87,7 +87,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

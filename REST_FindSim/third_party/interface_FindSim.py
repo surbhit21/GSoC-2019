@@ -1,5 +1,6 @@
 import matplotlib.pyplot as pyplot
 from FindSim.findSim import *
+import mpld3
 
 # What this func does:
 # 1)Run innerMain
@@ -13,6 +14,7 @@ def run_InnerMain():
     parser.add_argument( '-m', '--model', type = str)
     parser.add_argument( '-d', '--dump_subset', type = str, default = "" )
     parser.add_argument( '-p', '--param_file', type = str, default = "" )
+    parser.add_argument( '-t', '--tabulate_output', action="store_true")
     parser.add_argument( '-hp', '--hide_plot', action="store_true")
     parser.add_argument( '-hs', '--hide_subplots', action="store_true")
     parser.add_argument( '-o', '--optimize_elec', action="store_true")
@@ -23,7 +25,12 @@ def run_InnerMain():
     # Run innerMain in FindSim
     pyplot.ion()
     #output = subprocess.getoutput(command_FindSim)
-    innerMain( args.script, modelFile = args.model, dumpFname = args.dump_subset, paramFname = args.param_file, hidePlot = args.hide_plot, hideSubplots = args.hide_subplots, optimizeElec = args.optimize_elec, scaleParam = args.scale_param, settleTime = args.settle_time )
+    innerMain( args.script, \
+    modelFile = args.model, dumpFname = args.dump_subset, \
+    paramFname = args.param_file, hidePlot = args.hide_plot, \
+    hideSubplots = args.hide_subplots, optimizeElec = args.optimize_elec, \
+    scaleParam = args.scale_param, settleTime = args.settle_time)
+    #tabulateOutput = args.tabulate_output )
 
     fig = pyplot.figure(1)
     res_figure = mpld3.fig_to_html(fig)
