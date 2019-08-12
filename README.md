@@ -24,11 +24,12 @@ Framework for Integrating Neuronal Data and Signaling Models (FindSim) is a tool
 
 Running a FindSim can be a computing extensive processes depending on the size of the model and various parameters involved. With FindSim running on a high-performance machine, we can handle models and data with larger scale in less time. Meanwhile, we want more flexible access to FindSim, for example doing experiments by FindSim on a web borwser.
 To combine the flexibility of users' machines and the the computation power of high-performance machine, we developed FindSim REST APIs. Based on HTTP protocol, you can access well implemented FindSim running  on a high-performance machine with your network terminal anywhere.
-We also have web-based tool named FindSim-drupal(See https://github.com/BhallaLab/Findsim-drupal) which allow users to use the FindSim pipeline in a user-friendly way. This REST APIs for FindSim can be a strong support for the web tool.
-
 
 
 <h2 id="2">2.Registration to Findsim Interface</h2>
+
+We also have web-based tool named FindSim-drupal(See https://github.com/BhallaLab/Findsim-drupal) which allow users to use the FindSim pipeline in a user-friendly way. The REST APIs are designed for implementing on HPC and only accessible for FindSim web tool. Users can only access FindSim on HPC via this web interface.
+To use the services, you need to register with FindSim web interface at http://findsimweb.ncbs.res.in/?q=user/register
 
 
 <h2 id="3">3.APIs' User Guide</h2>
@@ -93,9 +94,9 @@ We also have web-based tool named FindSim-drupal(See https://github.com/BhallaLa
 
 and you can get this output if everything works fine:
 
-    > Django version 2.2.1, using settings 'REST_FindSim.settings'
-      Starting development server at http://127.0.0.1:8000/
-      Quit the server with CONTROL-C.
+>  Django version 2.2.1, using settings 'REST_FindSim.settings'
+ Starting development server at http://127.0.0.1:8000/
+ Quit the server with CONTROL-C.
 
 #### APIs' User Guide
 
@@ -194,14 +195,14 @@ In the future we may provide API that allow users to delete their submissions.
 > cd REST_FindSim  
 > ./manage.py test tasks.tests  
 
+if you get 'OK' on your command line ouput, then you have passed the test on your machine.
+
 #### Select part of the testcases:
 
 if you want to test part of the testcases. Use --tag arguments:  
-> ./manage.py test tasks.tests --tag=calculation  
+> ./manage.py test tasks.tests --tag=calculation   
 
-if you get 'OK' on your command line ouput, then you have passed the test on your machine.  
-
-The command above will test only FindSim API.  
+The command above will test only Experiment API.  
 
 - The tags we provided are:  
 
