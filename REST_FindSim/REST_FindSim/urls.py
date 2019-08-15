@@ -23,7 +23,7 @@ from django.views.static import serve
 from django.conf import settings
 
 router = DefaultRouter()
-router.register(r'tasks/Calculation', views.CalculationViewSet, base_name = 'calculation')
+router.register(r'tasks/Experiment', views.ExperimentViewSet, base_name = 'experiment')
 router.register(r'tasks/Optimization', views.OptimizationViewSet, base_name = 'optimization')
 
 urlpatterns = [

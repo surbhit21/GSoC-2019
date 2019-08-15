@@ -11,8 +11,8 @@ def model_directory_path(instance, filename):
     return 'files/model/{0}_at_{1}'.format(instance.username, str(time.time()))
 
 
-# Create your models here.
-class Calculation(models.Model):
+# My models here.
+class Experiment(models.Model):
     # Input
     username    = models.TextField(blank = False, default = 'admin_HC')
     tsv_file    = models.FileField(blank = False, upload_to = "files/tsv/")

@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import Calculation, Optimization
-from .serializers import CalculationSerializer, OptimizationSerializer
+from .models import Experiment, Optimization
+from .serializers import ExperimentSerializer, OptimizationSerializer
 from .run_findSim import run_findSim
 from .run_optimization import run_optimization
 
@@ -18,9 +18,9 @@ import shutil
 BASE_FILE_PATH = 'media/files/'
 
 # Create your views here.
-class CalculationViewSet(viewsets.ModelViewSet):
-    queryset = Calculation.objects.all()
-    serializer_class = CalculationSerializer
+class ExperimentViewSet(viewsets.ModelViewSet):
+    queryset = Experiment.objects.all()
+    serializer_class = ExperimentSerializer
 
     def create(self, request, *args, **kwargs):
 

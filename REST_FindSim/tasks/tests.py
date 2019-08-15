@@ -20,7 +20,7 @@ OUTPUT_JSON = True
 OUTPUT_HTML = True
 TIME_STAMP = ''
 
-class TestCalculation(TestCase):
+class TestExperiment(TestCase):
 
     # Open output html file:
     @classmethod
@@ -30,7 +30,7 @@ class TestCalculation(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        print('-------Testing calculation finished-------')
+        print('-------Testing experiments finished-------')
 
     # Output necessary info;
     # Check if there is errors.
@@ -61,7 +61,7 @@ class TestCalculation(TestCase):
         # build client
         self.test_client = Client()
         # set url
-        self.test_url = reverse('calculation-list')
+        self.test_url = reverse('experiment-list')
         # Open file
         html_path = TIME_STAMP + '.html'
         html_path = os.path.join(HTML_DIR, html_path)
@@ -70,18 +70,18 @@ class TestCalculation(TestCase):
     def tearDown(self):
         self.html_file.close()
 
-    @tag('BC','calculation')
-    def test_calculation_BC(self):
-        """ Test calculation. Type: BarChart """
+    @tag('BC','experiment')
+    def test_experiment_BC(self):
+        """ Test experiment. Type: BarChart """
         # bc_ratio_sb8.tsv
         tsv = os.path.join(TSV_DIR, 'bc_ratio_sb8.tsv')
         model = os.path.join(MODEL_DIR, 'synSynth7.g')
         r = self.send_request(tsv,model)
         self.handle_response(r)
 
-    @tag('DP','calculation')
-    def test_calculation_DP(self):
-        """ Test calculation. Type: DirectParameter """
+    @tag('DP','experiment')
+    def test_experiment_DP(self):
+        """ Test experiment. Type: DirectParameter """
         # dp_Kd_tau.tsv
         tsv = os.path.join(TSV_DIR, 'dp_Kd_tau.tsv')
         model = os.path.join(MODEL_DIR, 'synSynth7.g')
@@ -93,9 +93,9 @@ class TestCalculation(TestCase):
         r = self.send_request(tsv,model)
         self.handle_response(r)
 
-    @tag('DR','calculation')
-    def test_calculation_DR(self):
-        """ Test calculation. Type: DoseResponse """
+    @tag('DR','experiment')
+    def test_experiment_DR(self):
+        """ Test experiment. Type: DoseResponse """
         # dr_ratio_b2c.tsv
         tsv = os.path.join(TSV_DIR, 'dr_ratio_b2c.tsv')
         model = os.path.join(MODEL_DIR, 'synSynth7.g')
@@ -107,9 +107,9 @@ class TestCalculation(TestCase):
         r = self.send_request(tsv,model)
         self.handle_response(r)
 
-    @tag('TS','calculation')
-    def test_calculation_TS(self):
-        """ Test calculation. Type: TimeSeries """
+    @tag('TS','experiment')
+    def test_experiment_TS(self):
+        """ Test experiment. Type: TimeSeries """
         # iclamp_hh13.tsv
         tsv = os.path.join(TSV_DIR, 'iclamp_hh13.tsv')
         model = os.path.join(MODEL_DIR, 'loadhh.py')
@@ -208,8 +208,8 @@ class TestOptimization(TestCase):
 # This class is for printing info after tests.
 class TestFinishing(SimpleTestCase):
 
-    @tag('TS','BC','DR','DP','calculation')
-    def test_finishing(self):
+    @tag('TS','BC','DR','DP','experiment')
+    def test_finishing_experiments(self):
         print('-------TestCases finished-------')
 
         html_path = TIME_STAMP + '.html'

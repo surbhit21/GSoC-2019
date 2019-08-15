@@ -50,6 +50,6 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
     p.wait()
 
     # Parse output
-    t_result = parse_output(decode_bytes(output_info),decode_bytes(error_info),"Calculation")
+    t_result = parse_output(decode_bytes(output_info),decode_bytes(error_info),"Experiment")
 
     return t_result
