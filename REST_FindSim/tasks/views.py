@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import Calculation, Optimization
-from .serializers import CalculationSerializer, OptimizationSerializer
+from .models import Experiment, Optimization
+from .serializers import ExperimentSerializer, OptimizationSerializer
 from .run_findSim import run_findSim
 from .run_optimization import run_optimization
 
@@ -18,9 +18,10 @@ import shutil
 BASE_FILE_PATH = 'media/files/'
 
 # Create your views here.
-class CalculationViewSet(viewsets.ModelViewSet):
-    queryset = Calculation.objects.all()
-    serializer_class = CalculationSerializer
+# API for running FindSim experiments:
+class ExperimentViewSet(viewsets.ModelViewSet):
+    queryset = Experiment.objects.all()
+    serializer_class = ExperimentSerializer
 
     def create(self, request, *args, **kwargs):
 
@@ -28,22 +29,25 @@ class CalculationViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        #parse the path to .tsv file and model file
-
+        # 1.Parse the path to .tsv file and model file
         tsv_path = os.path.join(BASE_FILE_PATH, 'tsv/') + serializer.validated_data['tsv_file'].name
         model_path = os.path.join(BASE_FILE_PATH, 'model/') + serializer.validated_data['model_file'].name
 
+        # 2.Run FindSim experiment and get the output.
         res = run_findSim(tsv_path,model_path)
+        # Remove uploaded files
         os.remove(tsv_path)
         os.remove(model_path)
 
+        # 3.Set and save the results:
         serializer.validated_data['score'] = res.score
         serializer.validated_data['time'] = res.time
         serializer.validated_data['figure'] = res.figure
         serializer.validated_data['error'] = res.error
-
         serializer.save()
         headers = self.get_success_headers(serializer.data)
+        # Because we used 'serializer.save()' once more,
+        # we need to remove uploaded file one more time.
         os.remove(tsv_path)
         os.remove(model_path)
         return Response(serializer.data)
@@ -61,7 +65,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        # Parse the path to .tsv file and model file
+        # 1.Parse the path to .tsv file and model file
         tsv_path = os.path.join(BASE_FILE_PATH, 'tsv/') + serializer.validated_data['tsv_files'].name.split('/').pop()
         model_path = os.path.join(BASE_FILE_PATH, 'model/') + serializer.validated_data['model_file'].name.split('/').pop()
         file_label = serializer.validated_data['username'] + str(time.time())
@@ -72,7 +76,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         model_path_new = os.path.join(BASE_FILE_PATH, 'model/' + file_label+'/') + serializer.validated_data['model_file'].name
 
         print(serializer.validated_data['model_file'].__repr__())
-        # Rename the files to avoid collision
+        # 2.Rename the files to avoid collision
         if os.path.exists(tsv_path):
             os.rename(tsv_path, tsv_path_new)
         else:
@@ -83,7 +87,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
         else:
             serializer.validated_data['error'] = 'model file not found'
 
-        # If no errors, run optimization:
+        # 3.If no errors, run optimization and get the output:
         if 'error' not in serializer.validated_data:
             # define optimized model name
             optimized_model = os.path.join(BASE_FILE_PATH, 'model/') + file_label + '/optimized/' + model_path_new.split('/').pop()
@@ -103,7 +107,7 @@ class OptimizationViewSet(viewsets.ModelViewSet):
             serializer.validated_data['score'] = res.score
             serializer.validated_data['time'] = res.time
             serializer.validated_data['parameters'] = json.dumps(res.parameters)
-            # Get optimzed model
+            # Get optimzed model and write into local file
             if not res.has_error():
                 res_model_file = open(res.model)
                 serializer.validated_data['optimized_model'] = optimized_model_url

@@ -1,11 +1,13 @@
 from rest_framework import serializers
-from .models import Calculation, Optimization
+from .models import Experiment, Optimization
 
-class CalculationSerializer(serializers.HyperlinkedModelSerializer):
+# FindSim experiments:
+class ExperimentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Calculation
+        model = Experiment
         fields = ('username','tsv_file','model_file','score','time','figure','error')
 
+# FindSim optimization tasks:
 class OptimizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Optimization

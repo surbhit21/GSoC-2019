@@ -1,7 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Calculation, Optimization
+from .models import Experiment, Optimization
 
-admin.site.register(Calculation)
+#  FindSim Experiment tasks
+admin.site.register(Experiment)
+# FindSim Optimizations tasks
 admin.site.register(Optimization)

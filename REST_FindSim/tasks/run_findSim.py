@@ -3,9 +3,6 @@ import re
 
 from .utility import FindSimResult, parse_output, decode_bytes
 
-#from third_party.FindSim.findSim import *
-
-
 def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot = False, hideSubplots = False, optimizeElec=True,  silent = False, scaleParam=[], settleTime = 0, settleDict = {} ):
     t_result = FindSimResult()
 
@@ -29,7 +26,7 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
     if hidePlot:
         command_FindSim += ' -hp'
 
-    # TODO(Chen): add other arguments into command line
+    # TODO(Chen, 1103324644@qq.com): add other arguments into command line
     '''
     if dumpFname:
     if not optimizeElec:
@@ -38,18 +35,15 @@ def run_findSim( script, modelFile , dumpFname = "", paramFname = "", hidePlot =
     if settleTime:
     if settleDict:
     '''
-
+    
     # Run FindSim via subprocess
     # output = subprocess.getoutput(command_FindSim)
     print(command_FindSim)
     p = subprocess.Popen(command_FindSim,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     output_info, error_info = p.communicate()
-
-    #print(type(output_info))
-    #print(type(error_info))
     p.wait()
 
     # Parse output
-    t_result = parse_output(decode_bytes(output_info),decode_bytes(error_info),"Calculation")
+    t_result = parse_output(decode_bytes(output_info),decode_bytes(error_info),"Experiment")
 
     return t_result

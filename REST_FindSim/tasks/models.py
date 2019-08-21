@@ -1,7 +1,10 @@
 from django.db import models
 from REST_FindSim.settings import BASE_DIR
 
-# TODO(Chen): use these function to upload_to
+'''
+# TODO(Chen, 1103324644@qq.com):
+# Use these functions in 'upload_to' of model 'Optimization',
+# to generate dynamic path for model file and tsv zip file
 def tsv_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'files/tsv/{0}_at_{1}'.format(instance.username, str(time.time()))
@@ -9,10 +12,11 @@ def tsv_directory_path(instance, filename):
 def model_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'files/model/{0}_at_{1}'.format(instance.username, str(time.time()))
+'''
 
-
-# Create your models here.
-class Calculation(models.Model):
+# My models here.
+# FindSim experiments:
+class Experiment(models.Model):
     # Input
     username    = models.TextField(blank = False, default = 'admin_HC')
     tsv_file    = models.FileField(blank = False, upload_to = "files/tsv/")
@@ -23,6 +27,7 @@ class Calculation(models.Model):
     figure      = models.TextField(blank = True, null = True, editable = False)
     error       = models.TextField(blank = True, null = True, editable = False)
 
+# FindSim optimization tasks:
 class Optimization(models.Model):
     # Input
     username        = models.TextField(blank = False, default = 'admin_HC')

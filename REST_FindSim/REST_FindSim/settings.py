@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework',
     #own
     'tasks',
-    #'files',
 ]
 
 MIDDLEWARE = [
