@@ -6,7 +6,6 @@ import os
 from .utility import OptimizationResult, parse_output, decode_bytes
 from .run_findSim import run_findSim
 
-
 def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_processes, tolerance):
     t_result = OptimizationResult()
 
@@ -38,7 +37,7 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
     param_list_d = {}
     # Record num of tsv files
     tsv_cnt = 0
-    # output file of findSim: param list
+    # output file of findSim.py: param list
     tmp_param_list_path = os.path.join('media/files/tsv/'+file_label,"tmp_param_list.txt")
     # Traverse through directory
     for root, dirs, files in os.walk(tsv_file_path, topdown=False):
@@ -61,7 +60,7 @@ def run_optimization( tsv_zip, model_file , file_label, optimized_model, num_pro
             try:
                 tmp_param_list = open(tmp_param_list_path, 'r+')
                 param = tmp_param_list.readline().strip()
-                # For each param
+                # For each parameter
                 while param:
                     tmp_contents = param.split('   ')
                     assert(len(tmp_contents) == 2)

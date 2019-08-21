@@ -37,7 +37,6 @@ def run_InnerMain():
     pyplot.close()
     print('[Figure]'+ res_figure)
 
-
     return
 
 if __name__ == '__main__':

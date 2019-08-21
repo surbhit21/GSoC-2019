@@ -1,3 +1,6 @@
+'''
+This is the test file.
+'''
 from django.test import TestCase, SimpleTestCase
 from django.test import Client
 from django.test import tag
@@ -11,15 +14,22 @@ import time
 import requests
 import argparse
 
+# -------Some Configurations-------
+# Paths to test file
 TSV_ZIP_PATH = 'test_files/test_opt.zip'
 MODEL_DIR = 'test_files/model/'
 TSV_DIR = 'test_files/tsv/'
 HTML_DIR = 'test_files/output/html/'
+# After each testcase, output http response status if set'True'
 OUTPUT_STATUS = True
+# After each testcase, output http response json data if set'True'
 OUTPUT_JSON = True
+# After each experiment, save html of figure into loacl file if set'True'
 OUTPUT_HTML = True
+# Global variable for naming html file
 TIME_STAMP = ''
 
+# Test API for experiment
 class TestExperiment(TestCase):
 
     # Open output html file:
@@ -57,6 +67,9 @@ class TestExperiment(TestCase):
         response = self.test_client.post(self.test_url, contents)
         return response
 
+    # 1.Build django.test.Client for sending REST requests.
+    # 2.Get utl using django.urls.reverse().
+    # 3.Open html file for writing figures.
     def setUp(self):
         # build client
         self.test_client = Client()
@@ -67,6 +80,7 @@ class TestExperiment(TestCase):
         html_path = os.path.join(HTML_DIR, html_path)
         self.html_file = open(html_path,"a")
 
+    # Close html file.
     def tearDown(self):
         self.html_file.close()
 
@@ -137,7 +151,7 @@ class TestExperiment(TestCase):
         self.handle_response(r)
 
     '''
-    Test files are following:
+    Testing files are following:
     BarChart:
         bc_ratio_sb8.tsv synSynth7.g
     DirectParameter:
@@ -153,7 +167,7 @@ class TestExperiment(TestCase):
         ts_ratio_t2a.tsv synSynth7.g
         vclamp_hh.tsv loadhh.py
     '''
-
+# Test API for optimizatin
 class TestOptimization(TestCase):
 
     # Output necessary info;
@@ -180,6 +194,8 @@ class TestOptimization(TestCase):
         response = self.test_client.post(self.test_url, contents)
         return response
 
+    # 1.Build django.test.Client for sending REST requests
+    #  2. Get url using django.urls.reverse().
     def setUp(self):
         # build client
         self.test_client = Client()
